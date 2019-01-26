@@ -1,12 +1,8 @@
-import string
-import random
-import os
 from ufo_game.base import Game
 
 def main_loop():
     game = Game("nouns.txt")
-    game.beginNewGame()
-    game.status()
+    game.startGame()
     print(game._Game__codeword)
         
 

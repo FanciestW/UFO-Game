@@ -30,10 +30,10 @@ class Game:
 
         os.system('cls' if os.name == 'nt' else 'clear')
         print("UFO: The Game")
-        print("Instructions: save us from alien abduction by guessing letters in the codeword.")
+        print("Instructions: save us from alien abduction by guessing letters in the codeword.", end="\n\n")
         self.status()
 
-    def beginNewGame(self):
+    def startGame(self):
         self.resetGame()
 
     def status(self):
