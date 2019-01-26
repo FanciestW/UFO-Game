@@ -35,6 +35,11 @@ class Game:
 
     def startGame(self):
         self.resetGame()
+        self.gameLoop() 
+
+    def gameLoop(self):
+        while(True):
+            
 
     def status(self):
         # TODO::Print state of game
