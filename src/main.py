@@ -1,10 +1,11 @@
 from ufo_game.base import Game
+from ufo_game import animation
 
-def main_loop():
-    game = Game("nouns.txt")
+import time
+
+def main():
+    game = Game()
     game.startGame()
-    print(game._Game__codeword)
-        
 
 if __name__ == "__main__":
-    main_loop()
+    main()
