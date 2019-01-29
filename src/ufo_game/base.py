@@ -108,11 +108,20 @@ class Game:
             print(*self.incorrent_guesses, end="\n\n")
         print("Codeword:")
         print(*self.codeword_status, end="\n\n")
-        print(f"Number of dictionary matches:{self.countDictMatches()}")
+        print("Number of dictionary matches: %s" %(self.countDictMatches()), end="\n\n")
 
     def countDictMatches(self):
-        pattern = ''.join(self.codeword_status)
-        word_regex.buildRegex(pattern)
+        word_pattern = ''.join(self.codeword_status)
+        regex = word_regex.buildRegex(word_pattern)
+        excludeRegex = word_regex.buildExcludeRegex(self.incorrent_guesses)
+        print(regex)
+        print(excludeRegex)
+        count = 0
+        for word in self.words:
+            if re.match(regex, word) and re.match(excludeRegex, word):
+                count += 1
+
+        return count
 
     def winGame(self):
         animation.ufo_win()
