@@ -4,6 +4,7 @@ import os
 import re
 from . import ufo
 from . import animation
+from . import word_regex
 
 class Game:
 
@@ -106,7 +107,12 @@ class Game:
         else:
             print(*self.incorrent_guesses, end="\n\n")
         print("Codeword:")
-        print(*self.codeword_status, end="\n\n")        
+        print(*self.codeword_status, end="\n\n")
+        print(f"Number of dictionary matches:{self.countDictMatches()}")
+
+    def countDictMatches(self):
+        pattern = ''.join(self.codeword_status)
+
 
     def winGame(self):
         animation.ufo_win()

@@ -1,10 +1,10 @@
 from ufo_game.base import Game
-
-import time
+from ufo_game import word_regex
 
 def main():
     game = Game()
-    game.startGame()
+    # game.startGame()
+    print(word_regex.buildRegex("_R___", ['D', 'w']))
 
 if __name__ == "__main__":
     main()
