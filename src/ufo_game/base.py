@@ -112,7 +112,7 @@ class Game:
 
     def countDictMatches(self):
         pattern = ''.join(self.codeword_status)
-
+        word_regex.buildRegex(pattern)
 
     def winGame(self):
         animation.ufo_win()

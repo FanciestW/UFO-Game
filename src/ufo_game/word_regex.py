@@ -1,7 +1,7 @@
 import re
 
-def buildRegex(wordPattern, excludeLetters = None):
-    regex = ""
+def buildRegex(wordPattern):
+    regex = "^"
     tempPointer = 0
     for i, char in enumerate(wordPattern):
         if char == '_':
@@ -11,9 +11,17 @@ def buildRegex(wordPattern, excludeLetters = None):
         else:
             print("Error")
             return None
+
+    regex += '$'
+
+    return regex
+
+def buildExcludeRegex(excludedLetters):
+    regex = "^((?!["
+    for c in excludedLetters:
+        regex += "%s%s" %(c.upper(), c.lower())
     
-    for c in excludeLetters:
-        regex += f"[^{c.lower()}{c.upper()}]"
+    regex += "]).)*$"
 
     return regex
     
