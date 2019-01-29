@@ -1,5 +1,4 @@
 from ufo_game.base import Game
-from ufo_game import animation
 
 import time
 
