@@ -2,9 +2,9 @@ import random
 import string
 import os
 import re
-from . import ufo
-from . import animation
-from . import word_regex
+from ufo_game import ufo
+from ufo_game import animation
+from ufo_game import word_regex
 
 class Game:
 
@@ -114,8 +114,7 @@ class Game:
         word_pattern = ''.join(self.codeword_status)
         regex = word_regex.buildRegex(word_pattern)
         excludeRegex = word_regex.buildExcludeRegex(self.incorrent_guesses)
-        print(regex)
-        print(excludeRegex)
+        
         count = 0
         for word in self.words:
             if re.match(regex, word) and re.match(excludeRegex, word):
