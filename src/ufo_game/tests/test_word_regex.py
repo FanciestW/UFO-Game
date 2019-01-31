@@ -1,5 +1,5 @@
 import unittest
-import word_regex from ufo_game
+from .. import word_regex
 
 class TestWordRegex(unittest.TestCase):
 
@@ -9,12 +9,12 @@ class TestWordRegex(unittest.TestCase):
 
         for pattern, expected in zip(test_patterns, expected_regex):
             result = word_regex.buildRegex(pattern)
-            self.assertEqual(expected, result, msg=f"Test pattern {pattern} failed.")
+            self.assertEqual(expected, result, msg=f"Test pattern \"{pattern}\" failed with result \"{result}\".")
 
     def test_exclude_pattern(self):
-        test_letters = [None, "A", "ZDE", ['C','A']]
-        expected_regex = ["[a-zA-Z]*", "^((?![Aa]).)*$", "^((?![ZzDdEe]).)*$", "^((?![CcAa]).)*$"]
+        test_letters = [None, "", "A", "ZDE", ['C','A']]
+        expected_regex = ["[a-zA-Z]*", "[a-zA-Z]*", "^((?![Aa]).)*$", "^((?![ZzDdEe]).)*$", "^((?![CcAa]).)*$"]
 
         for pattern, expected in zip (test_letters, expected_regex):
             result = word_regex.buildExcludeRegex(pattern)
-            self.assertEqual(expected, result, msg=f"Test patter {pattern} failed.")
+            self.assertEqual(expected, result, msg=f"Test pattern \"{pattern}\" failed with result \"{result}\".")

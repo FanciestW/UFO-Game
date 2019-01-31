@@ -17,7 +17,7 @@ def buildRegex(wordPattern):
     return regex
 
 def buildExcludeRegex(excludedLetters):
-    if len(excludedLetters) == 0:
+    if excludedLetters == None or len(excludedLetters) == 0:
         return "[a-zA-Z]*"
     regex = "^((?!["
     for c in excludedLetters:
