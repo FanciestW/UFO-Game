@@ -114,7 +114,6 @@ class Game:
         word_pattern = ''.join(self.codeword_status)
         regex = word_regex.buildRegex(word_pattern)
         excludeRegex = word_regex.buildExcludeRegex(self.incorrent_guesses)
-        
         count = 0
         for word in self.words:
             if re.match(regex, word) and re.match(excludeRegex, word):
