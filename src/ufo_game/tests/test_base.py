@@ -1,3 +1,4 @@
+import os
 import unittest
 from ufo_game.base import Game
 
@@ -8,12 +9,17 @@ class TestWordRegex(unittest.TestCase):
         game.setNewCodeWord()
         game2 = Game.getInstance()
         self.assertEqual(game._Game__codeword, game._Game__codeword, msg="Singleton Error")
-        
-    def test_reset_game(self):
+        del game
+
+    def test_resetGame(self):
         game = Game.getInstance()
+        wordfile = open(f"{os.path.dirname(__file__)}/test_word_list.txt", "r")
+        game.words = wordfile.readlines()
+        wordfile.close()
         game.incorrent_guesses = ['T', 'D']
         game.resetGame()
         self.assertEqual(game.incorrent_guesses, [])
+        del game
 
     def test_guess(self):
         game = Game.getInstance()
@@ -25,9 +31,10 @@ class TestWordRegex(unittest.TestCase):
             game.setNewCodeWord(word)
             result = game.guess(letter)
             self.assertEqual(expected, result)
+        del game
 
         
-    def test_set_random_code_word(self):
+    def test_setRandomCodeWord(self):
         test_code_words = ["Test", "MAKE", "abc"]
         expected_code_words = ["TEST", "MAKE", "ABC"]
 
@@ -36,3 +43,12 @@ class TestWordRegex(unittest.TestCase):
             game.setNewCodeWord(codeword=codeword)
             self.assertEqual(game._Game__codeword, expected)
             self.assertEqual(len(game._Game__codeword), len(codeword))
+        del game
+    
+    def test_countDictMatches(self):
+        game = Game.getInstance()
+        wordfile = open(f"{os.path.dirname(__file__)}/test_word_list.txt", "r")
+        game.words = wordfile.readlines()
+        wordfile.close()
+        print(game.words)
+        del game
