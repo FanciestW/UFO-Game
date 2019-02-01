@@ -8,6 +8,7 @@ from ufo_game import word_regex
 
 class Game:
 
+    __instance = None
     __codeword = ""
     abduction_state = 0
     available_letters = list(string.ascii_uppercase);
@@ -16,7 +17,18 @@ class Game:
     wordlist_file = None
     words = None
 
+    @staticmethod
+    def getInstance():
+        if Game.__instance == None:
+            Game()
+        return Game.__instance
+
     def __init__(self, wordlist = None):
+        if Game.__instance != None:
+            raise Exception("There is a game session already in progress.")
+        else:
+            Game.__instance = self
+
         default_wordlist = f"{os.path.dirname(__file__)}/wordlist.txt"
         if wordlist == None:
             self.wordlist_file = open(default_wordlist, "r")
@@ -26,8 +38,13 @@ class Game:
         self.words = self.wordlist_file.readlines()
     
     def startGame(self):
+        welcomeMsg = (
+            "UFO: The Game\n"
+            "Instructions: save us from alien abduction by guessing letters in the codeword.\n"
+        )
         while(True):
             self.resetGame()
+            self.status(msg=welcomeMsg)
             self.gameLoop()
             ans = input("Would you like to play again (Y/N)? ").upper()
             if ans == 'Y':
@@ -36,9 +53,10 @@ class Game:
                 print("\nGoodbye!")
                 break
 
-    def setRandomCodeWord(self):
+    def setNewCodeWord(self, codeword=None):
         random_int = random.randint(0, len(self.words))
-        self.__codeword = self.words[random_int].strip().upper()
+        self.__codeword = self.words[random_int].strip().upper() if codeword==None else codeword
+        self.codeword_status = ['_']*len(self.__codeword)
 
     def gameLoop(self):
         while(True):
@@ -54,7 +72,11 @@ class Game:
             if not re.match("^[a-zA-Z]{1}", user_input):
                 print("Bad input. Try again\n")
                 continue
-            self.guess(user_input.upper())
+            result = self.guess(user_input.upper())
+            if result == 0:
+                self.status(msg="Incorrect! The tractor beam pulls the person in further.\n")
+            elif result == 1:
+                self.status(msg="Correct! You're closer to cracking the codeword.\n")
         
         print(f"The codeword is: {self.__codeword}.\n")
   
@@ -62,42 +84,37 @@ class Game:
         letter = letter.upper()
         if letter in self.incorrent_guesses or letter in self.codeword_status:
             print("You can only guess that letter once, please try again.\n")
-            return
+            return -1
         if letter not in self.available_letters:
             print("I cannot understand your input. Please guess a single letter.\n")
-            return
+            return -1
         print(type(self.available_letters))
         self.available_letters.remove(letter)
 
         if letter in self.__codeword:
             indices = [i for i, ch in enumerate(self.__codeword) if ch == letter]
+            print(indices)
             for i in indices:
                 self.codeword_status[i] = letter
             os.system('cls' if os.name == 'nt' else 'clear')
             if '_' in self.codeword_status:
-                print("Correct! You're closer to cracking the codeword.\n")
-                self.status()
+                return 1
+
         else:
             self.abduction_state += 1
             self.incorrent_guesses.append(letter)
-            os.system('cls' if os.name == 'nt' else 'clear')
             if self.abduction_state < 6:
-                print("Incorrect! The tractor beam pulls the person in further.\n")
-                self.status()
+                return 0
 
     def resetGame(self):
         self.abduction_state = 0
         self.available_letters = list(string.ascii_uppercase)
         self.incorrent_guesses = []
-        self.setRandomCodeWord()
-        self.codeword_status = ['_']*len(self.__codeword)
-
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("UFO: The Game")
-        print("Instructions: save us from alien abduction by guessing letters in the codeword.", end="\n\n")
-        self.status()    
+        self.setNewCodeWord()   
     
-    def status(self):
+    def status(self, msg=""):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(msg)
         # Uncomment below to view codeword while play testing
         # print(self.__codeword)
         print(ufo.states[self.abduction_state])
@@ -106,6 +123,7 @@ class Game:
             print("None", end="\n\n")
         else:
             print(*self.incorrent_guesses, end="\n\n")
+
         print("Codeword:")
         print(*self.codeword_status, end="\n\n")
         print("Number of dictionary matches: %s" %(self.countDictMatches()), end="\n\n")

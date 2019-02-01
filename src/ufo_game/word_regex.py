@@ -1,6 +1,9 @@
 import re
 
 def buildRegex(wordPattern):
+    if wordPattern == None or len(wordPattern) <= 0:
+        return "^$"
+        
     regex = "^"
     tempPointer = 0
     for i, char in enumerate(wordPattern):
