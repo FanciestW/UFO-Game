@@ -58,19 +58,6 @@ class Game:
                 print("\nGoodbye!")
                 break
 
-    def setNewCodeWord(self, codeword=None):
-        """Sets an explicit or random new codeword."""
-
-        if codeword == None or codeword == "":
-            random_int = random.randint(0, len(self.words))
-            self.__codeword = self.words[random_int].strip().upper()
-        else:
-            codeword = codeword.strip().upper()
-            self.words.append(codeword)
-            self.__codeword = codeword
-
-        self.codeword_status = ['_']*len(self.__codeword)
-
     def gameLoop(self):
         """Game loop for a new code word and game session."""
 
@@ -122,6 +109,19 @@ class Game:
             self.incorrent_guesses.append(letter)
             if self.abduction_state < 6:
                 return 0
+    
+    def setNewCodeWord(self, codeword=None):
+        """Sets an explicit or random new codeword."""
+
+        if codeword == None or codeword == "":
+            random_int = random.randint(0, len(self.words))
+            self.__codeword = self.words[random_int].strip().upper()
+        else:
+            codeword = codeword.strip().upper()
+            self.words.append(codeword)
+            self.__codeword = codeword
+
+        self.codeword_status = ['_']*len(self.__codeword)
 
     def resetGame(self):
         """Resets game session data in preparation for a new game."""
