@@ -19,11 +19,14 @@ class Game:
 
     @staticmethod
     def getInstance():
+        """Singleton check to make sure only one game instance runs at a time."""
         if Game.__instance == None:
             Game()
         return Game.__instance
 
     def __init__(self, wordlist = None):
+        """Creates new game instance and sets it to default or passed wordlist."""
+
         if Game.__instance != None:
             raise Exception("There is a game session already in progress.")
         else:
@@ -38,6 +41,8 @@ class Game:
         self.words = self.wordlist_file.readlines()
     
     def startGame(self):
+        """Begins game session and run loop for replay."""
+
         welcomeMsg = (
             "UFO: The Game\n"
             "Instructions: save us from alien abduction by guessing letters in the codeword.\n"
@@ -54,11 +59,21 @@ class Game:
                 break
 
     def setNewCodeWord(self, codeword=None):
-        random_int = random.randint(0, len(self.words))
-        self.__codeword = self.words[random_int].strip().upper() if codeword==None else codeword
+        """Sets an explicit or random new codeword."""
+
+        if codeword == None or codeword == "":
+            random_int = random.randint(0, len(self.words))
+            self.__codeword = self.words[random_int].strip().upper()
+        else:
+            codeword = codeword.strip().upper()
+            self.words.append(codeword)
+            self.__codeword = codeword
+
         self.codeword_status = ['_']*len(self.__codeword)
 
     def gameLoop(self):
+        """Game loop for a new code word and game session."""
+
         while(True):
             if '_' not in self.codeword_status:
                 self.winGame()
@@ -81,6 +96,8 @@ class Game:
         print(f"The codeword is: {self.__codeword}.\n")
   
     def guess(self, letter):
+        """Guesses a letter for the current game session and checks input."""
+
         letter = letter.upper()
         if letter in self.incorrent_guesses or letter in self.codeword_status:
             print("You can only guess that letter once, please try again.\n")
@@ -107,12 +124,16 @@ class Game:
                 return 0
 
     def resetGame(self):
+        """Resets game session data in preparation for a new game."""
+
         self.abduction_state = 0
         self.available_letters = list(string.ascii_uppercase)
         self.incorrent_guesses = []
         self.setNewCodeWord()   
     
     def status(self, msg=""):
+        """Prints status of game to display current game progress."""
+
         os.system('cls' if os.name == 'nt' else 'clear')
         print(msg)
         # Uncomment below to view codeword while play testing
@@ -129,6 +150,8 @@ class Game:
         print("Number of dictionary matches: %s" %(self.countDictMatches()), end="\n\n")
 
     def countDictMatches(self):
+        """Uses word_regex to build a regex to test possible matches in wordlist."""
+
         word_pattern = ''.join(self.codeword_status)
         regex = word_regex.buildRegex(word_pattern)
         excludeRegex = word_regex.buildExcludeRegex(self.incorrent_guesses)

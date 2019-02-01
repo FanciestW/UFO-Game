@@ -20,14 +20,19 @@ class TestWordRegex(unittest.TestCase):
         test_words = ["TEST", "ONE", "WORD", "ZIP"]
         test_guesses = ['T', 'D', 'W', 'E']
         expected_results = [1, 0, 1, 0]
+        # Expected results 1 means correct guess, 0 incorrect guess.
         for word, letter, expected in zip(test_words, test_guesses, expected_results):
-            game.setNewCodeWord(codeword=word)
-            print(word, letter, expected)
+            game.setNewCodeWord(word)
             result = game.guess(letter)
             self.assertEqual(expected, result)
 
         
     def test_set_random_code_word(self):
-        game = Game.getInstance()
-        game.setNewCodeWord()
-        self.assertNotEqual(game._Game__codeword, "")
+        test_code_words = ["Test", "MAKE", "abc"]
+        expected_code_words = ["TEST", "MAKE", "ABC"]
+
+        for codeword, expected in zip(test_code_words, expected_code_words):
+            game = Game.getInstance()
+            game.setNewCodeWord(codeword=codeword)
+            self.assertEqual(game._Game__codeword, expected)
+            self.assertEqual(len(game._Game__codeword), len(codeword))
