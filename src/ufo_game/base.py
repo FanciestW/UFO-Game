@@ -114,7 +114,7 @@ class Game:
         """Sets an explicit or random new codeword."""
 
         if codeword == None or codeword == "":
-            random_int = random.randint(0, len(self.words))
+            random_int = random.randint(0, len(self.words)-1)
             self.__codeword = self.words[random_int].strip().upper()
         else:
             codeword = codeword.strip().upper()
