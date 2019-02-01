@@ -1,6 +1,7 @@
 import random
 import string
 import os
+import sys
 import re
 from ufo_game import ufo
 from ufo_game import animation
@@ -48,15 +49,19 @@ class Game:
             "Instructions: save us from alien abduction by guessing letters in the codeword.\n"
         )
         while(True):
-            self.resetGame()
-            self.status(msg=welcomeMsg)
-            self.gameLoop()
-            ans = input("Would you like to play again (Y/N)? ").upper()
-            if ans == 'Y':
-                continue
-            else:
-                print("\nGoodbye!")
-                break
+            try:
+                self.resetGame()
+                self.status(msg=welcomeMsg)
+                self.gameLoop()
+                ans = input("Would you like to play again (Y/N)? ").upper()
+                if ans == 'Y':
+                    continue
+                else:
+                    print("\nGoodbye!")
+                    break
+            except KeyboardInterrupt:
+                os.system('cls' if os.name == 'nt' else 'clear')
+                sys.exit(0)
 
     def gameLoop(self):
         """Game loop for a new code word and game session."""
@@ -69,16 +74,21 @@ class Game:
                 self.loseGame()
                 break
             
-            user_input = input("Please enter your guess: ")
-            print('\n')
-            if not re.match("^[a-zA-Z]{1}", user_input):
-                print("Bad input. Try again\n")
-                continue
-            result = self.guess(user_input.upper())
-            if result == 0:
-                self.status(msg="Incorrect! The tractor beam pulls the person in further.\n")
-            elif result == 1:
-                self.status(msg="Correct! You're closer to cracking the codeword.\n")
+            try:
+                user_input = input("Please enter your guess: ")
+                print('\n')
+                if not re.match("^[a-zA-Z]{1}", user_input):
+                    print("Bad input. Try again\n")
+                    continue
+                result = self.guess(user_input.upper())
+                if result == 0:
+                    self.status(msg="Incorrect! The tractor beam pulls the person in further.\n")
+                elif result == 1:
+                    self.status(msg="Correct! You're closer to cracking the codeword.\n")
+
+            except KeyboardInterrupt:
+                os.system('cls' if os.name == 'nt' else 'clear')
+                sys.exit(0)
         
         print(f"The codeword is: {self.__codeword}.\n")
   
